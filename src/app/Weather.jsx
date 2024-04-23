@@ -24,6 +24,7 @@ export default function Weather() {
     const inputRef = useRef(null);
 
     const weatherApiCall = async (city) => {
+        setError({})
         let inputCity = city;
         if (!city?.length) {
             inputCity = 'delhi'
@@ -54,7 +55,7 @@ export default function Weather() {
     }
 
     const renderImage = () => {
-        if (!weatherData?.weather) return null;
+        if (!weatherData?.weather) return clear.src;
         if (weatherData.weather === 'Clouds') {
             return cloud.src
         }
@@ -73,6 +74,7 @@ export default function Weather() {
         if (weatherData?.weather === 'Haze') {
             return drizzle.src
         }
+        return clear.src;
     }
 
     useEffect(() => {
@@ -94,11 +96,11 @@ export default function Weather() {
                     </div>
                 </div>
                 {error?.error ? <div className={styles.errorMessage}>{error?.msg}</div> : null}
-                {loading ? <Grid
+                {error?.error ? null : loading ? <Grid
                     visible={true}
                     height="80"
                     width="80"
-                    color="#4fa94d"
+                    color="#ffffff"
                     ariaLabel="grid-loading"
                     radius="12.5"
                     wrapperStyle={{}}
@@ -116,11 +118,11 @@ export default function Weather() {
                 <div className={styles.otherWeatherData}>
                     <div className={styles.humidityContainer}>
                         <img className={styles.humidity} src={humidity.src} alt="" />
-                        <div>
-                            <div className={styles.humidityData}>
+                        <div className={styles.humidityData}>
+                            <div>
                                 {`${weatherData?.humidity} %`}
                             </div>
-                            <div className={styles.humidityData}>
+                            <div>
                                 Humidity
                             </div>
                         </div>
